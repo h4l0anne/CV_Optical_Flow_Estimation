@@ -56,25 +56,25 @@ fprintf("While in frequency based convolution the time taken is much smaller and
 fprintf('no matter the size of the kernel.');
 
 %% HYBRID IMAGE
-img1 = imread('bart.png');
-img2 = imread('homer.png');
-img1 = imresize(img1,[728 1030]);
-img2 = imresize(img2,[728 1030]);
+img1 = imread('thor.png');
+img2 = imread('loki.png');
+img1 = imresize(img1,[660 1200]);
+img2 = imresize(img2,[660 1200]);
 %   - Convert to gray - rgb2gray()
-bart = rgb2gray(img1);
-homer = rgb2gray(img2);
+thor = rgb2gray(img1);
+loki = rgb2gray(img2);
 
 %   - fft2 of images -> img1_fft, img2_fft
 %   - Low Pass filter
 %   - Make gaussian kernel - Test it
-sigma = 3;
+sigma = 6;
 hsize = sigma*6 +1;
 
 h2 = fspecial('gaussian', hsize, sigma);
 %   - fft2 of gaussian kernel
-h2_w = fft2(h2,728,1030);
-img1_fft = fft2(bart);
-img2_fft = fft2(homer);
+h2_w = fft2(h2,660,1200);
+img1_fft = fft2(thor);
+img2_fft = fft2(loki);
 
 %   - Convolute gaussian kernel with img1
 %        - Multiply img1_fft with fft2 of gaussian kernel -> low_frequency_img
@@ -93,7 +93,7 @@ hybrid_result = ifft2(result);
 figure(2); 
 imshow(uint8(hybrid_result));
 figure(3);
-imshow(imresize(uint8(hybrid_result),0.2));
+imshow(imresize(uint8(hybrid_result),0.1));
 
 %% OPTICAL FLOW ESTIMATION
 %% 3.1 sphere
@@ -109,7 +109,7 @@ threshold = 0.01;
 
 %% 3.2 flowToColor sphere
 
-flow = u;
+flow(:,:,1) = u;
 flow(:,:,2) = v;
 flowToColor(flow);
 figure('Name','flowToColor for sphere'), imshow(flowToColor(flow),[]);
@@ -121,11 +121,11 @@ img4 = imread('Sequences\Sequences\corridor\bt_1.png');
 
 win_length = 25;
 threshold = 0.01;
-myFlow(img3,img4,win_length,threshold);
+[u,v] = myFlow(img3,img4,win_length,threshold);
 
 %% 3.2 flowToColor corridor
 
-flow = u;
+flow(:,:,1) = u;
 flow(:,:,2) = v;
 flowToColor(flow);
 figure('Name','flowToColor for corridor'), imshow(flowToColor(flow),[]);
@@ -135,17 +135,19 @@ fprintf('when the window length is increased.');
 img5 = imread('Sequences\Sequences\synth\synth_0.png');
 img6 = imread('Sequences\Sequences\synth\synth_1.png');
 
-win_length = 25;
+win_length = 20;
 threshold = 0.01;
-myFlow(img5,img6,win_length,threshold);
+[u,v] = myFlow(img5,img6,win_length,threshold);
 
 %% 3.2 flowToColor synth
 
-flow = u;
+flow(:,:,1) = u;
 flow(:,:,2) = v;
 flowToColor(flow);
 figure('Name','flowToColor for synth'), imshow(flowToColor(flow),[]);
 fprintf('The size of the flow fields increases and the intensity of the colours intensifies \n');
 fprintf('when the window length is increased.');
 
-%% 3.3 
+%% 3.3 myWarp
+
+myWarp(img6,
