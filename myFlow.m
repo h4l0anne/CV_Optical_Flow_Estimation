@@ -12,14 +12,14 @@ function [u,v] =  myFlow(img1,img2,win_length, threshold)
     %covert the images to a range of [0 1]
     img1 = mat2gray(img1);
     img2 = mat2gray(img2);
-    img1 = imresize(img1, [100 100]);
-    img2 = imresize(img2, [100 100]);
+    row = size(img1,1);
+    col = size(img1,2);
+    img1 = imresize(img1, [row col]);
+    img2 = imresize(img2, [row col]);
     %Compute spatial derivatives in first frame (Ix, Iy)     
     Ix_img1 = conv2(img1,flipped_gaus_filter,'same');
     Iy_img1 = conv2(img1,flipped_gaus_filter','same');
 
-    row = size(img1,1);
-    col = size(img1,2);
     i = 3;
     h = fspecial('gaussian',i,1);
     h_w = fft2(h,row,col);
@@ -30,6 +30,7 @@ function [u,v] =  myFlow(img1,img2,win_length, threshold)
     %Smooth the images
 %     image1 = filter2(h_w, img1);
 %     image2 = filter2(h_w, img2);
+
     %Compute the difference to get temporal derivative, convert it back to
     %time domain
     It = result2 - result1;
@@ -65,8 +66,7 @@ function [u,v] =  myFlow(img1,img2,win_length, threshold)
                     u(row, col) = u_v(1);
                     v(row, col) = u_v(2);
                 end
-                
-                
+                            
                 
         end
     end
