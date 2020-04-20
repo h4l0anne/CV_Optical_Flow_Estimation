@@ -97,57 +97,77 @@ imshow(imresize(uint8(hybrid_result),0.1));
 
 %% OPTICAL FLOW ESTIMATION
 %% 3.1 sphere
+close all;
 img1 = imread('Sequences\Sequences\sphere\sphere_0.png');
 img2 = imread('Sequences\Sequences\sphere\sphere_1.png');
 
 img1 = rgb2gray(img1);
 img2 = rgb2gray(img2);
 
+img1 = double(img1);
+img2 = double(img2);
+
 win_length = 25;
 threshold = 0.01;
 [u,v] = myFlow(img1,img2,win_length,threshold);
 
-%% 3.2 flowToColor sphere
+%3.2 flowToColor sphere
 
-flow(:,:,1) = u;
+flow = u;
 flow(:,:,2) = v;
 flowToColor(flow);
 figure('Name','flowToColor for sphere'), imshow(flowToColor(flow),[]);
 fprintf('The size of the flow fields increases and the intensity of the colours intensifies \n');
-fprintf('when the window length is increased.');
+fprintf('when the window length is increased.\n');
+
+% 3.3 myWarp
+myWarp(img1,img2,u,v);
+
 %% 3.1 corridor
+close all;
 img3 = imread('Sequences\Sequences\corridor\bt_0.png');
 img4 = imread('Sequences\Sequences\corridor\bt_1.png');
+
+img3 = double(img3);
+img4 = double(img4);
 
 win_length = 25;
 threshold = 0.01;
 [u,v] = myFlow(img3,img4,win_length,threshold);
 
-%% 3.2 flowToColor corridor
+% 3.2 flowToColor corridor
 
-flow(:,:,1) = u;
+flow = u;
 flow(:,:,2) = v;
 flowToColor(flow);
 figure('Name','flowToColor for corridor'), imshow(flowToColor(flow),[]);
 fprintf('The size of the flow fields increases and the intensity of the colours intensifies \n');
-fprintf('when the window length is increased.');
+fprintf('when the window length is increased.\n');
+
+% 3.3 myWarp
+myWarp(img3,img4,u,v);
+
 %% 3.1 synth
+close all;
 img5 = imread('Sequences\Sequences\synth\synth_0.png');
 img6 = imread('Sequences\Sequences\synth\synth_1.png');
+
+img5 = double(img5);
+img6 = double(img6);
 
 win_length = 20;
 threshold = 0.01;
 [u,v] = myFlow(img5,img6,win_length,threshold);
 
-%% 3.2 flowToColor synth
+% 3.2 flowToColor synth
 
-flow(:,:,1) = u;
+flow = u;
 flow(:,:,2) = v;
 flowToColor(flow);
 figure('Name','flowToColor for synth'), imshow(flowToColor(flow),[]);
 fprintf('The size of the flow fields increases and the intensity of the colours intensifies \n');
-fprintf('when the window length is increased.');
+fprintf('when the window length is increased.\n');
 
-%% 3.3 myWarp
+% 3.3 myWarp
+myWarp(img5,img6,u,v);
 
-myWarp(img6,
